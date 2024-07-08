@@ -7,11 +7,13 @@ Original file is located at
     https://colab.research.google.com/drive/15seof4HQBBO82OVwjEChCSz4MNV70Z6W
 """
 
-'''Authors
-On behalf of TU Dresden
+'''
+Authors
+On behalf of TU Dresden:
 Anushka Pankaj Joshi
 Kleio Liotati
-Zeynep Yilbirt'''
+Zeynep Yilbirt
+'''
 
 # numpy for basic array calculations
 import numpy as np
@@ -39,7 +41,7 @@ rcParams['font.sans-serif'] = ['DejaVu Sans']
 # Disable LaTeX rendering
 plt.rcParams['text.usetex'] = False
 
-# Define the probability distribution
+# Define the probability distribution (we used the Normal Distribution)
 values = np.linspace(-3,3,251) # k+1 values b/w -3 and 3 in an array
 probabilities = np.exp(-(values)**2) #Gaussian not normalised
 probabilities /=np.sum(probabilities) #normalised propabilities
@@ -65,10 +67,10 @@ plt.show()
 
 # Calculate the mean
 mean = np.sum(values * probabilities)
-print(mean)
+print(mean) # mean should be close to 0
 
 #seed
-DL=100
+DL=100 # dimensions of the bounded box
 N=2
 dl=DL/N
 x=np.array([i*dl for i in range(N)])+0.5*dl
@@ -88,7 +90,7 @@ v = 1  # velocity
 dt = 1  # timestep
 Nmax = 1e4  # Number of timesteps
 angles = [20, 18, 16, 14, 12, 10, 8, 6, 4]   # List of angle values
-
+# angles = [40, 35, 32, 30, 28, 26, 24, 22, 20, 18] 
 
 # Function to handle boundary wrapping using modulo
 def wrap_position(xn, yn, DL):
@@ -205,7 +207,10 @@ for angle, Nmax_values in all_Nmax_values.items():
     else:
         print(f"No particles reached the target for angle {angle} across all particles and simulations")
 
-# Code for a particle running until Tmax
+
+#------------------------------------------------------------------------------------------------------------
+
+# Second Setup: Code for a particle running until Tmax
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -216,18 +221,10 @@ dt = 1  # timestep
 N=1
 Nmax = int(1e4)  # Number of timesteps
 angles = [20, 18, 16, 14, 12, 10, 8, 6, 4]  # List of angle values
+# angles = [40, 35, 32, 30, 28, 26, 24, 22, 20, 18] 
 repetitions = 250  # Number of repetitions for each angle
 DL = 100  # Assuming a predefined value for DL if needed
 
-'''# Define probabilities and values for direction change
-values = np.linspace(-1, 1, 100)  # Example values
-probabilities = np.ones(100) / 100  # Example probabilities
-'''
-
-# Define the probability distribution
-#values = np.linspace(-3,3,501)
-#probabilities = np.exp(-(values)**2) #Gaussian not normesd
-#probabilities /=np.sum(probabilities) #norm probabilities
 
 # Example particle positions and orientations (placeholders)
 xx = np.random.rand(N) * DL
@@ -301,7 +298,7 @@ except IOError:
 
 
 
-# MSD code
+# Calculating MSD
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -378,7 +375,7 @@ for angle in msd_all_angles:
     for rep_msd in msd_reps_all[angle]:
         plt.plot(rep_msd, alpha=0.5)  # Alpha for transparency
 
-    # Plot the average MSD in a bold line
+    # Plot the average MSD in a bold dark line on a log scale
     plt.plot(msd_all_angles[angle], label=f"Angle: {angle}", linewidth=2, color='black')
 
     plt.xlabel('Time lag')
@@ -397,7 +394,7 @@ for angle in msd_all_angles:
         print(f"{i}, {msd_value}")
     print("\n")
 
-# Plot average MSD for all angles in a separate plot
+# Plot average MSD for all angles in a separate log plot
 plt.figure(figsize=(12, 8))
 for angle, msd_average in msd_all_angles.items():
     plt.plot(msd_average, label=f"Angle: {angle}", linewidth=2)
@@ -423,7 +420,7 @@ plt.legend()
 plt.grid(True, which="major", ls="--")
 plt.show()
 
-# Code for MSD Slope
+# Calculating the MSD Slope to check for diffusion (superdiffusion whenever 1 < slope < 2)
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -458,7 +455,7 @@ for angle, msd_average in msd_all_angles.items():
         print(f"{i+1}, {slope_value}")
     print("\n")
 
-# Plot all slopes vs. time lag on the same plot
+# Plot all slopes vs. time lag on the same log plot
 plt.figure(figsize=(10, 6))
 for angle, slopes, adjusted_log_time_lags in zip(msd_all_angles.keys(), all_slopes, all_adjusted_log_time_lags):
     plt.plot(np.exp(adjusted_log_time_lags[:8000]), slopes[:8000], label=f"Angle: {angle}")
@@ -471,4 +468,3 @@ plt.yscale('linear')
 plt.grid(True, which="major", ls="--")
 plt.legend()
 plt.show()
-
